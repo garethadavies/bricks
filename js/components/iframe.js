@@ -46,7 +46,7 @@ Notes:
 		* @property ui
 		*/
 		ui: {
-			iframe: '.iframe'
+			iframe: 'iframe'
 		},
 
 		/**

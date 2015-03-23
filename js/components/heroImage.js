@@ -41,21 +41,21 @@ Notes:
 		exampleProperty: 0,
 
 		/**
-		* Reusable UI elements
+		* Component instance UI elements
 		*
 		* @property ui
 		*/
 		ui: {
-			image: '.hero-image'
+			image: 'img'
 		},
 
 		/**
-		* Reusable UI elements
+		* Component instance events
 		*
 		* @property ui
 		*/
 		events: {
-			'click .hero-image': 'onClick'
+			'click img': 'onClick'
 		},
 
 		/**

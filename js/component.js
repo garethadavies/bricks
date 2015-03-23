@@ -11,7 +11,7 @@ Requires:
 Author(s):
 	* Gareth Davies @GarethDavies_Me
 Notes:
-	* This is the base file for all the website components
+	* This is the base file for all the components
 */
 
 
@@ -20,14 +20,13 @@ var Bricks = {};
 
 // Objects to place all components
 Bricks.Components = {};
-Bricks.Components.components = [];
 
 ;(function($, _, window, document, undefined) {
 
 	'use strict';
 
 	/**
-	* Extend Helper - Backbone
+	* Extend Helper
 	* Helper function to correctly set up the prototype chain, for subclasses. Similar to goog.inherits, but uses a hash of prototype properties and class properties to be extended.
 	*
 	* @method extend
@@ -35,43 +34,49 @@ Bricks.Components.components = [];
 	*/
 	var extend = function(protoProps, staticProps) {
 
-	    var
-	    parent = this,
-	    child;
+		var
+		parent = this,
+		child,
+		Surrogate;
 
 		// The constructor function for the new subclass is either defined by you (the "constructor" property in your extend definition), or defaulted by us to simply call the parent's constructor.
-	    if (protoProps && _.has(protoProps, 'constructor')) {
-	    	
-	    	child = protoProps.constructor;
-	    
-	    }
-	    else {
+		if (protoProps && _.has(protoProps, 'constructor')) {
+			
+			child = protoProps.constructor;
+		
+		}
+		else {
 
-	    	child = function(){ return parent.apply(this, arguments); };
-	    
-	    }
+			child = function(){ return parent.apply(this, arguments); };
+		
+		}
 
 		// Add static properties to the constructor function, if supplied.
-	    _.extend(child, parent, staticProps);
+		_.extend(child, parent, staticProps);
 
 		// Set the prototype chain to inherit from parent, without calling parent's constructor function.
-	    var Surrogate = function(){ this.constructor = child; };
-	    Surrogate.prototype = parent.prototype;
-	    child.prototype = new Surrogate();
+		Surrogate = function() {
+
+			this.constructor = child;
+
+		};
+
+		Surrogate.prototype = parent.prototype;
+		child.prototype = new Surrogate();
 
 		// Add prototype properties (instance properties) to the subclass, if supplied.
-	    if (protoProps) {
+		if (protoProps) {
 
-	    	_.extend(child.prototype, protoProps);
+			_.extend(child.prototype, protoProps);
 
-	    }
+		}
 
 		// Set a convenience property in case the parent's prototype is needed later.
-	    child.__super__ = parent.prototype;
+		child.__super__ = parent.prototype;
 
-	    return child;
+		return child;
 
-  	}
+  	};
 
 	/**
 	* Bricks Base Component
@@ -114,13 +119,6 @@ Bricks.Components.components = [];
 	_.extend(Bricks.Component.prototype, {
 
 		/**
-		* Initialisation
-		*
-		* @method init
-		*/
-		init: function() {},
-
-        /**
 		* Cache component UI elements
 		*
 		* @method defineUiElements
@@ -145,139 +143,139 @@ Bricks.Components.components = [];
 				
 			});
 
-        },
+		},
 
-        /**
+		/**
 		* Register component event listeners
 		*
 		* @method registerEvents
 		*/
-        registerEvents: function() {
+		registerEvents: function() {
 
-            var that = this;
+			var that = this;
 
-            // Return if there are no events
+			// Return if there are no events
 			if (!this.events) return false;
 
-            // For each element defined in component
+			// For each element defined in component
 			_.each(this.events, function(value, key) {
 
-	            that.eventOnOff('on', value, key);
+				that.eventOnOff('on', value, key);
 
-	        });
+			});
 
-        },
+		},
 
-        /**
+		/**
 		* Unbind component event listeners
 		*
 		* @method unbindEvents
 		*/
-        unbindEvents: function() {
+		unbindEvents: function() {
 
-            var that = this;
+			var that = this;
 
-            // Return if there are no events
+			// Return if there are no events
 			if (!this.events) return false;
 
-            // For each element defined in component
+			// For each element defined in component
 			_.each(this.events, function(value, key) {
 
-	            that.eventOnOff('off', value, key);
+				that.eventOnOff('off', value, key);
 
-	        });
+			});
 
-        },
+		},
 
-        /**
-        * Extract the event configuration
-        *
-        * @method extractEventConfig
-        * @param type {String} The method of choice (on or off)
-        * @param value {String} The event's callback method
-        * @param key {String} The event type and selector
-        */
-        eventOnOff: function(type, value, key) {
+		/**
+		* Extract the event configuration
+		*
+		* @method extractEventConfig
+		* @param type {String} The method of choice (on or off)
+		* @param value {String} The event's callback method
+		* @param key {String} The event type and selector
+		*/
+		eventOnOff: function(type, value, key) {
 
-        	var
-        	that = this,
-            splitted,
-            separator = '',
-            eventName = '';
+			var
+			that = this,
+			splitted,
+			separator = '',
+			eventName = '';
 
-            // Detect a class or id selector
-            if (key.indexOf('.') !== -1) {
+			// Detect a class or id selector
+			if (key.indexOf('.') !== -1) {
 
-                separator = '.';
+		separator = '.';
 
-                // Split the key value
-	            splitted = key.split(separator);
+		// Split the key value
+				splitted = key.split(separator);
 
-            }
-            else if (key.indexOf('#') !== -1) {
+			}
+			else if (key.indexOf('#') !== -1) {
 
-                separator = '#';
+		separator = '#';
 
-                // Split the key value
-	            splitted = key.split(separator);
+		// Split the key value
+				splitted = key.split(separator);
 
-            }
-            else {
+			}
+			else {
 
-            	separator = ' ';
+				separator = ' ';
 
-                // Split the key value
-	            splitted = key.split(separator);
+		// Split the key value
+				splitted = key.split(separator);
 
-            }
+			}
 
-            // Add a tap event automatically to click events
-            eventName = ($.trim(splitted[0]) === 'click') ? 'click tap' : splitted[0];
+			// Add a tap event automatically to click events
+			eventName = ($.trim(splitted[0]) === 'click') ? 'click tap' : splitted[0];
 
-            // Listen for the supplied event
-            $(separator + splitted[1], that.$element)[type](eventName, function(e) {
+			// Listen for the supplied event
+			$(separator + splitted[1], that.$element)[type](eventName, function(e) {
 
-            	e.preventDefault();
+				e.preventDefault();
 
-                // Execute the method supplied and pass on the event object
-                that[value](e);
+		// Execute the method supplied and pass on the event object
+		that[value](e);
 
-            });
+			});
 
-        },
+		},
 
-        /**
-        * Remove the component element
-        *
-        * @method removeElement
-        * @param message {String} A message to replace the element with
-        */
-        removeElement: function(options) {
+		/**
+		* Remove the component element
+		*
+		* @method removeElement
+		* @param message {String} A message to replace the element with
+		*/
+		removeElement: function(options) {
 
-        	options = options || {};
+			options = options || {};
 
-        	_.defaults(options, {
-        		message: ''
-        	});
+			_.defaults(options, {
+				message: ''
+			});
 
-        	// Unbind all event listeners
-        	this.unbindEvents();
+			// Unbind all event listeners
+			this.unbindEvents();
 
-        	// Do we have a meesage to show?
-        	if (options.message) {
+			// Do we have a meesage to show?
+			if (options.message) {
 
-        		// Replace the component element
-	        	this.$element.replaceWith('<p>' + options.message + '</p>');
+				// Replace the component element
+				this.$element.replaceWith('<p>' + options.message + '</p>');
 
-        	}
-        	else {
+			}
+			else {
 
-	        	// Remove the component element from the DOM
-	        	this.$element.remove();
-        		
-        	}
+				// Remove the component element from the DOM
+				this.$element.remove();
+				
+			}
 
-        }
+		}
 
 	});
 	
@@ -340,7 +338,7 @@ Bricks.Components.components = [];
 
    //      		that.viewportMonitor(element);
 
-   //          }));
+   //		  }));
 
    //      },
 

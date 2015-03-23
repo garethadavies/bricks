@@ -8,10 +8,11 @@
 Requires:
 	* jQuery
 	* Underscore
+	* component.js
 Author(s):
 	* Gareth Davies @GarethDavies_Me
 Notes:
-	* 
+	* Makes ure this file is included/required after all the components
 */
 
 ;(function($, _, window, document, undefined) {
@@ -32,8 +33,6 @@ Notes:
 		dataAttrs = $component.data(),
 		options = {};
 
-		/* Extract options */
-
 		// For each data attribute on the component's root element
 		_.each(dataAttrs, function(value, key) {
 
@@ -42,8 +41,8 @@ Notes:
 
 		});
 
-		// Add the component to the components list
-		Bricks.Components.components.push(new Bricks.Components[options.type]($component, options));
+		// Create new component instance
+		new Bricks.Components[options.type]($component, options);
 
 	};
 
